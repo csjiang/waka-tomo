@@ -11,13 +11,35 @@ const Waka = db.define('waka', {
   	allowNull: false,
   },
   tokens: {
-  	type: Sequelize.Array(Sequelize.STRING),
-  	allowNull: false,
+  	type: Sequelize.ARRAY(Sequelize.STRING),
+  	defaultValue: [], //I still want all my scraped waka to end up in the db even if they don't contain matching tokens, just in case I expand the kigo dictionary later
   },
   author: {
   	type: Sequelize.STRING,
   	allowNull: false,
   },
+}, {
+  getterMethods: {},
+  instanceMethods: {},
+  classMethods:{
+    findByAuthor: function (author) {
+      return this.findAll({
+        where: {author: {$like: `%${author}%`}}
+      })
+      .then(function (foundWaka) {
+        return foundWaka;
+      });
+    }, 
+    findByToken: function (token) {
+      return this.findAll({
+        where: {tokens: {$contains: token}},
+      })
+      .then(function (foundWaka) {
+        return foundWaka;
+      });
+    }
+  },
+  hooks: {},
 });
 
 module.exports = Waka;

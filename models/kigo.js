@@ -15,12 +15,27 @@ const Kigo = db.define('kigo', {
 		allowNull: false,
 	},
 	reading: {
-		type: Sequelize.Array(Sequelize.STRING),
+		type: Sequelize.ARRAY(Sequelize.STRING),
 		allowNull: false,
 	},
 	synonyms: {
-		type: Sequelize.Array(Sequelize.STRING),
+		type: Sequelize.ARRAY(Sequelize.STRING),
+		defaultValue: [],
 	},
+}, {
+	getterMethods: {},
+	instanceMethods: {},
+	classMethods:{
+		findBySeason: function (season) {
+			return this.findAll({
+				where: {season: {$like: `%${season}%`}}
+			})
+			.then(function (foundKigo) {
+				return foundKigo;
+			});
+		}
+	},
+	hooks: {},
 });
 
 module.exports = Kigo;
