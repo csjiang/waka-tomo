@@ -49,3 +49,5 @@ app.listen(port, function () {
     console.error('ERROR ERROR ERROR', err, err.stack);
   });
 });
+
+module.exports = app;

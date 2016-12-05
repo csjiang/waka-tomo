@@ -7,4 +7,3 @@
 - synonyms: /［.+?］/g (some don't have, so this can be null or empty array)
 - description: /<br>.*<br>/ - 411 matches- after removing poems and replacing w <br>
 - poem: /　　.+?<.+?>.*?<br>/g - 536 matches (plus have to add last one manually) 
-- 
