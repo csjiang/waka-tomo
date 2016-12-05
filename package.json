@@ -11,6 +11,7 @@
   "dependencies": {
     "bluebird": "^3.4.6",
     "express": "^4.14.0",
+    "htmlparser2": "^3.9.2",
     "jsonfile": "^2.4.0",
     "phantom": "^3.2.0",
     "sequelize": "^3.27.0"

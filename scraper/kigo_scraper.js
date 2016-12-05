@@ -9,8 +9,7 @@ const writeFile = Promise.promisify(require('fs').writeFile);
 const getEntries = function () {
   return document.getElementById("E6.97.A5.E6.9C.AC.E5.A4.A7.E7.99.BE.E7.A7.91.E5.85.A8.E6.9B.B8.28.E3.83.8B.E3.83.83.E3.83.9D.E3.83.8B.E3.82.AB.29").getElementsByClassName("ex")[1].innerHTML;
 };
-// const parseText = require('./parse');
-// const cleanUpFiles = require('./scrape-utils');
+const parse = require('./kigo_parser');
 
 const scrape = (url, filename, directory) => {
   phantom.create()
@@ -24,6 +23,9 @@ const scrape = (url, filename, directory) => {
         .then(() => {
           page.evaluate(getEntries)
           .then((dictEntries) => {
+            const cleanEntries = dictEntries.replace('［', '<br>[').replace('］', ']').replace(/(［.*?)(?:<\/?span.*?>)/g, "$1").replace(/<\/span>(?=.*?］)/g, '').replace(/　　(.*?)<\/?.*?>(.*?＜)/g, '$1$2').split('<br><b>');
+            cleanEntries.slice(0, 5).forEach(e => parse(e));
+
             writeFile(`${__dirname}/${directory}/${filename}.html`, dictEntries)
               .then(() => {
               console.log(`Contents successfully scraped to ${__dirname}/${directory}/${filename}.html!`);
