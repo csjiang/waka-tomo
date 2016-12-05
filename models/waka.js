@@ -8,7 +8,7 @@ const Waka = db.define('waka', {
   },
   text_hiragana: {
   	type: Sequelize.STRING,
-  	allowNull: false,
+  	defaultValue: '',
   },
   tokens: {
   	type: Sequelize.ARRAY(Sequelize.STRING),
@@ -39,7 +39,7 @@ const Waka = db.define('waka', {
       });
     }
   },
-  hooks: {},
+  hooks: {}, //to-do: create a setter method for tokens + hiragana that parses text through parse-japanese npm module and sets values
 });
 
 module.exports = Waka;

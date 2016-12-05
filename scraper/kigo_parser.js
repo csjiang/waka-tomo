@@ -1,12 +1,14 @@
-var htmlparser = require("htmlparser2");
+const htmlparser = require('htmlparser2');
+const Kigo = require('../models/kigo');
+const Waka = require('../models/waka');
 
 const parse = chunk => {
-    var newEntry = {name: '', reading: '', definition: '', synonyms: [], season: ''};
-    var newPoem = {text: '', author: ''};
-    var parser = new htmlparser.Parser({
+    let newEntry = {name: '', reading: '', definition: '', synonyms: [], season: ''};
+    let newPoem = {text: '', author: ''};
+    const parser = new htmlparser.Parser({
 
     ontext: function(text) {
-        console.log(text);
+        // console.log(text);
         if (!newEntry['name']) {
             newEntry['name'] = text;
         } else if (!newEntry['reading']) {
@@ -36,6 +38,16 @@ const parse = chunk => {
         } else {
             newEntry['definition'] += text;
         }
+    },
+    
+    onend: function() {
+        Waka.create(newPoem)
+        .then(createdPoem => console.log('New poem created!'))
+        .catch(console.error);
+
+        Kigo.create(newEntry)
+        .then(createdEntry => console.log('New dictionary entry created!'))
+        .catch(console.error);
     },
 
 }, {decodeEntities: true});
