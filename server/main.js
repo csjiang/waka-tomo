@@ -4,6 +4,7 @@ import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import db from './models';
+import path from 'path';
 
 const app = express();
 
@@ -20,18 +21,20 @@ app.use(require('../routes'));
 
 // failed to catch req above means 404, forward to error handler
 app.use(function (req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+
+    if (path.extname(req.path).length > 0) {
+        res.status(404);
+    } else {
+        next(null);
+    }
+
 });
 
 // handle any errors
 app.use(function (err, req, res, next) {
-  console.error(err, err.stack);
-  res.status(err.status || 500);
-  res.render('error', {
-    error: err
-  });
+    console.error(err, typeof next);
+    console.error(err.stack)
+    res.status(err.status || 500).send(err.message || 'Internal server error.');
 });
 
 // listen on a port

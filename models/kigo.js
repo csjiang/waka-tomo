@@ -16,7 +16,7 @@ const Kigo = db.define('kigo', {
 	},
 	reading: {
 		type: Sequelize.ARRAY(Sequelize.STRING),
-		allowNull: false,
+		defaultValue: this.getDataValue('name'),
 	},
 	synonyms: {
 		type: Sequelize.ARRAY(Sequelize.STRING),
