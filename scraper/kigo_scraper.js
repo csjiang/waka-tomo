@@ -20,7 +20,15 @@ const scrape = (url, filename, directory) => {
         .then(() => {
           page.evaluate(getEntries)
           .then((dictEntries) => {
-            const cleanEntries = dictEntries.replace('［', '<br>[').replace('］', ']').replace(/(［.*?)(?:<\/?span.*?>)/g, "$1").replace(/<\/span>(?=.*?］)/g, '').replace(/　　(.*?)<\/?.*?>(.*?＜)/g, '$1$2').split('<br><b>');
+            const cleanEntries = dictEntries
+            .replace(/<br><b>【.*?】<\/b>/g, '') //remove season tag headings
+            .replace(/<br>　　　.*?<br>/g, '') //remove subseason tag headings
+            .replace('［', '[')
+            .replace('］', ']')
+            .replace(/(［.*?)(?:<\/?span.*?>)/g, "$1") //remove ruby tags in synonym arrays
+            .replace(/<\/span>(?=.*?］)/g, '') //remove all ruby closing tags
+            .replace(/　　(.*?)<\/?.*?>(.*?＜)/g, '$1$2') //remove span tags in poetry
+            .split('<b>');
             cleanEntries.slice(0, 5).forEach(e => parse(e));
 
             writeFile(`${__dirname}/${directory}/${filename}.html`, dictEntries)

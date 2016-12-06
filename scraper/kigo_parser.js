@@ -1,14 +1,16 @@
 const htmlparser = require('htmlparser2');
-const Kigo = require('../models/kigo');
-const Waka = require('../models/waka');
+// const Kigo = require('../models/kigo');
+// const Waka = require('../models/waka');
 
 const parse = chunk => {
     let newEntry = {name: '', reading: '', definition: '', synonyms: [], season: ''};
     let newPoem = {text: '', author: ''};
     const parser = new htmlparser.Parser({
 
+    //try: on br switch to new parser for each thing 
+
     ontext: function(text) {
-        // console.log(text);
+        console.log('parsing line: ' + text);
         if (!newEntry['name']) {
             newEntry['name'] = text;
         } else if (!newEntry['reading']) {
@@ -32,23 +34,27 @@ const parse = chunk => {
         } else if (text.includes('＜')) {
             const splitLine = text.split('＜');
             newPoem['text'] += splitLine[0];
-            newPoem['author'] = splitLine[1];
+            newPoem['author'] = splitLine[1].replace('＞', '');
+            console.log(newPoem);
         } else if (text.includes('　　')) {
             newPoem['text'] = text;
         } else {
             newEntry['definition'] += text;
         }
     },
-    
-    onend: function() {
-        Waka.create(newPoem)
-        .then(createdPoem => console.log('New poem created!'))
-        .catch(console.error);
 
-        Kigo.create(newEntry)
-        .then(createdEntry => console.log('New dictionary entry created!'))
-        .catch(console.error);
-    },
+    //poem parser: be able to handle multiple poems
+
+    
+    // onend: function() {
+    //     Waka.create(newPoem)
+    //     .then(createdPoem => console.log('New poem created!'))
+    //     .catch(console.error);
+
+    //     Kigo.create(newEntry)
+    //     .then(createdEntry => console.log('New dictionary entry created!'))
+    //     .catch(console.error);
+    // },
 
 }, {decodeEntities: true});
     parser.write(chunk);
