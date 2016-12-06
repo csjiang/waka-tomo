@@ -5,24 +5,25 @@ const db = require('../models');
 const cheerio = require('cheerio');
 const request = require('request-promise');
 const parse = require('./kigo_parser');
+let cleanEntries;
 
 request.get(url)
-  .then((res) => {
-    const $ = cheerio.load(res, { decodeEntities: false });
+  	.then((res) => {
+	    const $ = cheerio.load(res, { decodeEntities: false });
 
-    const $nipponica = $('article').eq(3);  //日本大百科全書(ニッポニカ)
-    const $dictEntries = $nipponica.find('.ex').eq(1).find('.description').html();
-    const cleanEntries = $dictEntries
-    	.replace(/.*?(<br><b>)/, '$1') 		// drop the intro text
-	    .replace(/<br><b>【.*?】<\/b>/g, '') 	// remove season tag headings
-	    .replace(/<br>　　　.*?<br>/g, '') 	// remove subseason tag headings
-	    .replace(/［/g, '<br>[')
-	    .replace(/］/g, ']')
-	    .replace(/<\/?span.*?>/g, '') 		// remove ruby tags
-	    .split('<b>'); 						// split on each entry
-
-    return db.sync()
-    .then(
-	    cleanEntries.slice(0, 2).forEach(e => parse(e)))
-  })
-  .catch(console.error);
+	    const $nipponica = $('article').eq(3);  //日本大百科全書(ニッポニカ)
+	    const $dictEntries = $nipponica.find('.ex').eq(1).find('.description').html();
+	    cleanEntries = $dictEntries
+	    	.replace(/.*?(<br><b>)/, '$1') 		// drop the intro text
+		    .replace(/<br><b>【.*?】<\/b>/g, '') 	// remove season tag headings
+		    .replace(/<br>　　　.*?<br>/g, '') 	// remove subseason tag headings
+		    .replace(/［/g, '<br>[')
+		    .replace(/］/g, ']')
+		    .replace(/<\/?span.*?>/g, '') 		// remove ruby tags
+		    .split('<b>'); 						// split on each entry
+	})
+	.then(() => db.sync({force : true}))
+    .then(() => console.log('Finished syncing the database!'))
+    .then(() => cleanEntries.forEach(e => parse(e)))
+    .then(() => console.log('Finished populating the database!'))
+  	.catch(console.error);

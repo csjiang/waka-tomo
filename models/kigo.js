@@ -15,7 +15,8 @@ const Kigo = db.define('kigo', {
 		defaultValue: '新年',
 	},
 	reading: {
-		type: Sequelize.ARRAY(Sequelize.STRING),
+		type: Sequelize.STRING,
+		defaultValue: '',
 	},
 	synonyms: {
 		type: Sequelize.ARRAY(Sequelize.STRING),
