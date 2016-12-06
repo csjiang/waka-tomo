@@ -6,10 +6,10 @@ const Waka = db.define('waka', {
   	type: Sequelize.STRING,
   	allowNull: false,
   },
-  text_hiragana: {
-  	type: Sequelize.STRING,
-  	defaultValue: '',
-  },
+  // text_hiragana: { // not yet implemented
+  // 	type: Sequelize.STRING,
+  // 	defaultValue: '',
+  // },
   tokens: {
   	type: Sequelize.ARRAY(Sequelize.STRING),
   	defaultValue: [], //I still want all my scraped waka to end up in the db even if they don't contain matching tokens, just in case I expand the kigo dictionary later
@@ -19,12 +19,16 @@ const Waka = db.define('waka', {
   	allowNull: false,
   },
 }, {
-  getterMethods: {},
-  instanceMethods: {},
+  // getterMethods: {},
+  // instanceMethods: {},
   classMethods:{
     findByAuthor: function (author) {
       return this.findAll({
-        where: {author: {$like: `%${author}%`}}
+        where: {
+          author: {
+            $like: `%${author}%`
+          }
+        }
       })
       .then(function (foundWaka) {
         return foundWaka;
@@ -32,14 +36,18 @@ const Waka = db.define('waka', {
     }, 
     findByToken: function (token) {
       return this.findAll({
-        where: {tokens: {$contains: token}},
+        where: {
+          tokens: {
+            $contains: token
+          }
+        },
       })
       .then(function (foundWaka) {
         return foundWaka;
       });
     }
   },
-  hooks: {}, //to-do: create a setter method for tokens + hiragana that parses text through parse-japanese npm module and sets values
+  // hooks: {}, //to-do: create a setter method for tokens + hiragana that parses text through python tokenizer module and sets values
 });
 
 module.exports = Waka;

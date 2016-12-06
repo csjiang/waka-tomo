@@ -1,65 +1,48 @@
 const htmlparser = require('htmlparser2');
-// const Kigo = require('../models/kigo');
-// const Waka = require('../models/waka');
+const Kigo = require('../models/kigo');
+const Waka = require('../models/waka');
 
 const parse = chunk => {
     let newEntry = {name: '', reading: '', definition: '', synonyms: [], season: ''};
     let newPoem = {text: '', author: ''};
     const parser = new htmlparser.Parser({
 
-    //try: on br switch to new parser for each thing 
-
-    ontext: function(text) {
-        console.log('parsing line: ' + text);
-        if (!newEntry['name']) {
-            newEntry['name'] = text;
-        } else if (!newEntry['reading']) {
-            newEntry['reading'] = text.replace(/[()]/g, '');
-        } else if (!newEntry['season']) {
-            textSeason = text.split('）');
-            const theSeason = textSeason[0].replace(/[（]/g, '');
-            newEntry['season'] = theSeason;
-            if (textSeason[1]) {
-                const someSynonyms = textSeason[1].replace(/[\［\］]/g, '').split('・');
-                newEntry['synonyms'] = someSynonyms;
-            }
-        } else if (text.includes('[') && text.includes(']')) {
-            newEntry['synonyms'] = text.replace('・', ',');
-        } else if (text.includes('[')) {
-            newEntry['synonyms'].push(text.slice(1).split('・'));
-        } else if (text.includes(']')) {
-            newEntry['synonyms'].push(text.slice(0, text.length-1).split('・'));
-        } else if (!newEntry['definition']) {
-            newEntry['definition'] = text;
-        } else if (text.includes('＜')) {
+    ontext: function (text) {
+        // console.log('parsing line: ' + text);
+        if (!text) return;
+        if (!newEntry['name']) { // sample line: '暖か(あたたか)'
+            const nameReading = text.split('(');
+            newEntry['name'] = nameReading[0];
+            nameReading[1] 
+            ? newEntry['reading'] = nameReading[1].replace(')', '')
+            : null
+        } else if (!newEntry['season'] && text.includes('（')) { //　'（三春）'
+            const season = text.replace(/[\s（）]/g, '');
+            newEntry['season'] = season;
+        } else if (text.includes('[') && text.includes(']')) { // '[春暖(しゅんだん)・ぬくし]'
+            newEntry['synonyms'] = text.replace(/[\[\]]/g, '').split('・');
+        } else if (!newEntry['definition']) { // '春の光のもと、すべてのものがやわらかく明るく輝いてみえるようすをいう.'
+            newEntry['definition'] = text.trim();
+        } else if (text.includes('＜')) { // 'うららかや猫にものいふ妻のこゑ　＜日野草城＞'
             const splitLine = text.split('＜');
-            newPoem['text'] += splitLine[0];
+            newPoem['text'] += splitLine[0].trim();
             newPoem['author'] = splitLine[1].replace('＞', '');
-            console.log(newPoem);
-        } else if (text.includes('　　')) {
-            newPoem['text'] = text;
-        } else {
-            newEntry['definition'] += text;
+            
+            // poem instance created here because some entries have more than one example
+            Waka.create({ newPoem })
+                .then(createdPoem => console.log('New poem created!', createdPoem))
+                .catch(console.error);
         }
     },
-
-    //poem parser: be able to handle multiple poems
-
     
-    // onend: function() {
-    //     Waka.create(newPoem)
-    //     .then(createdPoem => console.log('New poem created!'))
-    //     .catch(console.error);
-
-    //     Kigo.create(newEntry)
-    //     .then(createdEntry => console.log('New dictionary entry created!'))
-    //     .catch(console.error);
-    // },
+    onend: function() {
+        Kigo.create({ newEntry })
+            .then(createdEntry => console.log('New dictionary entry created!', createdEntry))
+            .catch(console.error);
+    },
 
 }, {decodeEntities: true});
     parser.write(chunk);
-    console.log(newEntry);
-    console.log(newPoem);
     parser.end();
 }
 
