@@ -1,7 +1,7 @@
 const url = `https://kotobank.jp/word/%E5%AD%A3%E8%AA%9E-473181#E5.A4.A7.E8.BE.9E.E6.9E.97.20.E7.AC.AC.E4.B8.89.E7.89.88`;
 //Christine is very sad at the lack of APIs among Japanese dictionaries
 
-const db = require('../models');
+const db = require('../server/db/');
 const cheerio = require('cheerio');
 const request = require('request-promise');
 const parse = require('./kigo_parser');

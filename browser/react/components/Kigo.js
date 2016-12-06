@@ -7,7 +7,7 @@ const Kigo = (props) => {
 
   return (
     <div>
-      <h3>Kigo</h3>
+      <h3>季語</h3>
         <div className="list-group">
         {
           kigo.map(kigo => {

@@ -14,7 +14,7 @@ export default class NotFound extends Component {
       <div>
         <h3>404 Page not found</h3>
         <p>This is why we can't have nice things</p>
-        <Link to='/Kigo' onClick={() => this.props.resetState()}>Take me back where I belong!</Link>
+        <Link to='/Kigo'>Take me back where I belong!</Link>
       </div>
     );
   }

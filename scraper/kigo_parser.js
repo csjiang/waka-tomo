@@ -1,6 +1,6 @@
 const htmlparser = require('htmlparser2');
-const Kigo = require('../models/kigo');
-const Waka = require('../models/waka');
+const Kigo = require('../server/db/models/kigo');
+const Waka = require('../server/db/models/waka');
 
 const parse = chunk => {
     let newEntry = {

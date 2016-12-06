@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const db = require('./_db');
+const db = require('../_db');
 
-const Waka = db.define('waka', {
+module.exports = db.define('waka', {
   text: {
   	type: Sequelize.STRING,
   	allowNull: false,
@@ -49,5 +49,3 @@ const Waka = db.define('waka', {
   },
   // hooks: {}, //to-do: create a setter method for tokens + hiragana that parses text through python tokenizer module and sets values
 });
-
-module.exports = Waka;

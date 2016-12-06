@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { hashHistory } from 'react-router';
 
-// import initialState from '../initialState';
-
+import initialState from '../initialState';
 import Kigo from '../components/Kigo';
 import Waka from '../components/Waka';
 import NotFound from '../components/NotFound';
@@ -11,24 +11,25 @@ export default class AppContainer extends Component {
 
   constructor (props) {
     super(props);
-    this.state = {
-      kigo: [],
-      waka: [],
-      selectedKigo: {},
-      selectedWaka: {},
-      selectedSeason: '',
-      selectedCategory: '',
-    };
+    this.state = initialState;
   }
 
   componentDidMount () {
-    axios.get('/api/kigo/')
-    .then(res => res.data)
-    .then(kigo => this.setState({ kigo }}));
 
-    axios.get('/api/waka/')
-      .then(res => res.data)
-      .then(waka => this.setState({ waka }));
+    Promise
+    .all([
+      axios.get('/api/kigo/'),
+      axios.get('/api/waka/')
+    ])
+    .then(res => res.map(r => r.data))
+    .then(data => this.onLoad(...data));
+  }
+
+  onLoad (kigo, waka) {
+    this.setState({
+      kigo,
+      waka,
+    });
   }
 
   selectKigo (kigoId) {
@@ -50,6 +51,17 @@ export default class AppContainer extends Component {
   }
 
   render () {
+    const props = Object.assign({}, this.state, {
+      kigo: this.state.kigo,
+      waka: this.state.waka,
+      selectedKigo: this.state.selectedKigo,
+      selectedWaka: this.state.selectedWaka,
+      selectedSeason: this.state.selectedSeason,
+      selectedCategory: this.state.selectedCategory,
+      savedKigo: this.state.savedKigo,
+      savedWaka: this.state.savedWaka,
+    });
+
     if (this.state.invalid) {
       return (
         <div id="main" className="container-fluid">
@@ -66,16 +78,7 @@ export default class AppContainer extends Component {
       <div id="main" className="container-fluid">
         <div className="col-xs-10">
         {
-          this.props.children 
-          ? React.cloneElement(this.props.children, {
-              kigo: this.state.kigo,
-              waka: this.state.waka,
-              selectedKigo: this.state.selectedKigo,
-              selectedWaka: this.state.selectedWaka,
-              selectedSeason: this.state.selectedSeason,
-              selectedCategory: this.state.selectedCategory,
-            })
-            : null
+          this.props.children && React.cloneElement(this.props.children, props)
         }
         </div>
       </div>

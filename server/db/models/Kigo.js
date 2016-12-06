@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-const db = require('./_db');
+const db = require('../_db');
 
-const Kigo = db.define('kigo', {
+module.exports = db.define('kigo', {
 	name: {
 	  	type: Sequelize.STRING,
 	  	allowNull: false,
@@ -45,5 +45,3 @@ const Kigo = db.define('kigo', {
 	},
 	hooks: {},
 });
-
-module.exports = Kigo;

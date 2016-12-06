@@ -1,53 +1,32 @@
 'use strict';
+/* eslint-disable global-require */
 
-import express from 'express';
-import morgan from 'morgan';
-import bodyParser from 'body-parser';
-import db from './models';
-import path from 'path';
+// Requires in ./db/index.js -- which returns a promise that represents
+// sequelize syncing its models to the postgreSQL database.
+var startDb = require('./db');
 
-const app = express();
+// Create a node server instance! cOoL!
+var server = require('http').createServer();
 
-// logging and body-parsing
-app.use(morgan('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+var createApplication = function () {
+    var app = require('./app');
+    server.on('request', app); // Attach the Express application.
+};
 
-// serve static files
-app.use(express.static(__dirname + '/public'));
+var startServer = function () {
 
-// serve dynamic routes
-app.use(require('../routes'));
+    var PORT = process.env.PORT || 1337;
 
-// failed to catch req above means 404, forward to error handler
-app.use(function (req, res, next) {
+    server.listen(PORT, function () {
+        console.log('Server started on port', PORT);
+    });
 
-    if (path.extname(req.path).length > 0) {
-        res.status(404);
-    } else {
-        next(null);
-    }
+};
 
+startDb
+.then(createApplication)
+.then(startServer)
+.catch(function (err) {
+    console.error(err.stack);
+    process.exit(1);
 });
-
-// handle any errors
-app.use(function (err, req, res, next) {
-    console.error(err, typeof next);
-    console.error(err.stack)
-    res.status(err.status || 500).send(err.message || 'Internal server error.');
-});
-
-// listen on a port
-const port = 1156;
-app.listen(port, function () {
-  console.log('The server is listening closely on port', port);
-  db.sync()
-  .then(function () {
-    console.log('Synchronated the database');
-  })
-  .catch(function (err) {
-    console.error('ERROR ERROR ERROR', err, err.stack);
-  });
-});
-
-module.exports = app;

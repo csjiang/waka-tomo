@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import AppContainer from './containers/AppContainer';
 import Waka from './components/Waka';
 import Kigo from './components/Kigo';
+import SingleKigo from './components/SingleKigo';
+import SingleWaka from './components/SingleWaka';
 import NotFound from './components/NotFound';
 import {Router, Route, hashHistory, IndexRedirect} from 'react-router';
 
