@@ -3,8 +3,17 @@ const Kigo = require('../models/kigo');
 const Waka = require('../models/waka');
 
 const parse = chunk => {
-    let newEntry = {name: '', reading: '', definition: '', synonyms: [], season: ''};
-    let newPoem = {text: '', author: ''};
+    let newEntry = {
+        name: '', 
+        reading: '', 
+        definition: '', 
+        synonyms: [], 
+        season: ''
+    };
+    let newPoem = {
+        text: '', 
+        author: ''
+    };
     const parser = new htmlparser.Parser({
 
     ontext: function (text) {
@@ -29,16 +38,25 @@ const parse = chunk => {
             newPoem['author'] = splitLine[1].replace('＞', '');
             
             // poem instance created here because some entries have more than one example
-            Waka.create({ newPoem })
-                .then(createdPoem => console.log('New poem created!', createdPoem))
-                .catch(console.error);
+            Waka.create({
+                text: newPoem.text,
+                author: newPoem.author,
+            })
+            .then(createdPoem => console.log('New poem created!', createdPoem))
+            .catch(console.error);
         }
     },
     
     onend: function() {
-        Kigo.create({ newEntry })
-            .then(createdEntry => console.log('New dictionary entry created!', createdEntry))
-            .catch(console.error);
+        Kigo.create({
+            name: newEntry.name,
+            definition: newEntry.definition,
+            season: newEntry.season,
+            reading: newEntry.reading,
+            synonyms: newEntry.synonyms,
+        })
+        .then(createdEntry => console.log('New dictionary entry created!', createdEntry))
+        .catch(console.error);
     },
 
 }, {decodeEntities: true});

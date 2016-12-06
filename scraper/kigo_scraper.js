@@ -1,46 +1,28 @@
-const phantom = require('phantom');
-const Promise = require('bluebird');
-const writeFile = Promise.promisify(require('fs').writeFile);
+const url = `https://kotobank.jp/word/%E5%AD%A3%E8%AA%9E-473181#E5.A4.A7.E8.BE.9E.E6.9E.97.20.E7.AC.AC.E4.B8.89.E7.89.88`;
+//Christine is very sad at the lack of APIs among Japanese dictionaries
+
+const db = require('../models');
+const cheerio = require('cheerio');
+const request = require('request-promise');
 const parse = require('./kigo_parser');
 
-const myUrl = 'https://kotobank.jp/word/%E5%AD%A3%E8%AA%9E-473181#E5.A4.A7.E8.BE.9E.E6.9E.97.20.E7.AC.AC.E4.B8.89.E7.89.88';
-const getEntries = function () {
-  return document.getElementById("E6.97.A5.E6.9C.AC.E5.A4.A7.E7.99.BE.E7.A7.91.E5.85.A8.E6.9B.B8.28.E3.83.8B.E3.83.83.E3.83.9D.E3.83.8B.E3.82.AB.29").getElementsByClassName("ex")[1].children('.description').innerHTML;
-};
+request.get(url)
+  .then((res) => {
+    const $ = cheerio.load(res, { decodeEntities: false });
 
-const scrape = (url, filename, directory) => {
-  phantom.create()
-  .then((ph) => {
-    ph.createPage()
-    .then((page) => {
-      page.open(url)
-      .then((status) => {
-        console.log("Attempting to open site: ", status);         
-        page.injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
-        .then(() => {
-          page.evaluate(getEntries)
-          .then((dictEntries) => {
-            const cleanEntries = dictEntries
-            .replace(/<br><b>【.*?】<\/b>/g, '') //remove season tag headings
-            .replace(/<br>　　　.*?<br>/g, '') //remove subseason tag headings
-            .replace(/［/g, '<br>[')
-            .replace(/］/g, ']')
-            .replace(/<\/?span.*?>/g, '') //remove ruby tags
-            // .replace(/<\/span>/g, '') //remove all ruby closing tags
-            // .replace(/　　(.*?)<\/?.*?>(.*?＜)/g, '$1$2') //remove span tags in poetry
-            .split('<b>');
-            cleanEntries.slice(0, 5).forEach(e => parse(e));
+    const $nipponica = $('article').eq(3);  //日本大百科全書(ニッポニカ)
+    const $dictEntries = $nipponica.find('.ex').eq(1).find('.description').html();
+    const cleanEntries = $dictEntries
+    	.replace(/.*?(<br><b>)/, '$1') 		// drop the intro text
+	    .replace(/<br><b>【.*?】<\/b>/g, '') 	// remove season tag headings
+	    .replace(/<br>　　　.*?<br>/g, '') 	// remove subseason tag headings
+	    .replace(/［/g, '<br>[')
+	    .replace(/］/g, ']')
+	    .replace(/<\/?span.*?>/g, '') 		// remove ruby tags
+	    .split('<b>'); 						// split on each entry
 
-            writeFile(`${__dirname}/${directory}/${filename}.html`, dictEntries)
-              .then(() => {
-              console.log(`Contents successfully scraped to ${__dirname}/${directory}/${filename}.html!`);
-              })
-              });
-            });
-            });
-          });
-        });
-      }
-
-scrape(myUrl, 'dict', 'scrapedfiles');
-module.exports = scrape;
+    return db.sync()
+    .then(
+	    cleanEntries.slice(0, 2).forEach(e => parse(e)))
+  })
+  .catch(console.error);

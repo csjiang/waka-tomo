@@ -12,23 +12,30 @@ const Kigo = db.define('kigo', {
 	},
 	season: {
 		type: Sequelize.STRING,
-		allowNull: false,
+		defaultValue: '新年',
 	},
 	reading: {
 		type: Sequelize.ARRAY(Sequelize.STRING),
-		defaultValue: this.getDataValue('name'),
 	},
 	synonyms: {
 		type: Sequelize.ARRAY(Sequelize.STRING),
 		defaultValue: [],
 	},
+	// category: { //not yet implemented
+	// 	type: Sequelize.STRING,
+	// 	defaultValue: '',
+	// }
 }, {
 	getterMethods: {},
 	instanceMethods: {},
 	classMethods:{
 		findBySeason: function (season) {
 			return this.findAll({
-				where: {season: {$like: `%${season}%`}}
+				where: {
+					season: {
+						$like: `%${season}%`
+					}
+				}
 			})
 			.then(function (foundKigo) {
 				return foundKigo;
