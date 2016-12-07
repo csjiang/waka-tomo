@@ -1,6 +1,7 @@
 'use strict';
 
 const webpack = require('webpack');
+var plugins = require('webpack-load-plugins')();
 
 module.exports = {
   entry: './browser/react/index.js',
@@ -19,7 +20,18 @@ module.exports = {
         query: {
           presets: ['react', 'es2015']
         }
+      },
+      { 
+        test: /\.css$/,
+        loader: "css-loader" 
+      }
+    ], 
+
+    plugins: [
+      'import', {
+        libraryName: "antd"       //need to resolve this issue w css
       }
     ]
+
   }
 };

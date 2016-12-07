@@ -34,5 +34,10 @@
     "request-promise": "^4.1.1",
     "sequelize": "^3.27.0",
     "webpack": "^1.13.3"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.1.0",
+    "css-loader": "^0.26.1",
+    "webpack-load-plugins": "^0.1.2"
   }
 }

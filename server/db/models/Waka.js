@@ -12,7 +12,7 @@ module.exports = db.define('waka', {
   // },
   tokens: {
   	type: Sequelize.ARRAY(Sequelize.STRING),
-  	defaultValue: [], //I still want all my scraped waka to end up in the db even if they don't contain matching tokens, just in case I expand the kigo dictionary later
+  	defaultValue: [],
   },
   author: {
   	type: Sequelize.STRING,
@@ -47,5 +47,5 @@ module.exports = db.define('waka', {
       });
     }
   },
-  // hooks: {}, //to-do: create a setter method for tokens + hiragana that parses text through python tokenizer module and sets values
+  // hooks: {},
 });

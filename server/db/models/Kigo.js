@@ -40,7 +40,7 @@ module.exports = db.define('kigo', {
 			})
 			.then(function (foundKigo) {
 				return foundKigo;
-			});
+			})
 		}
 	},
 	hooks: {},
