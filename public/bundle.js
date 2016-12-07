@@ -28136,10 +28136,10 @@
 	              { to: '/kigo/' + kigo.id },
 	              _react2.default.createElement(
 	                _card2.default,
-	                { style: { width: 240 }, bodyStyle: { padding: 0 } },
+	                { style: { width: 240 } },
 	                _react2.default.createElement(
 	                  'div',
-	                  { className: 'kigo-card vertical-text' },
+	                  { className: 'vertical-text' },
 	                  _react2.default.createElement(
 	                    'h3',
 	                    null,

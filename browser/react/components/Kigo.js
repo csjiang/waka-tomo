@@ -21,12 +21,14 @@ const Kigo = (props) => {
           shuffle(kigo).map(kigo => {
             return (
               <Col span="8" key={kigo.id}>
-              <Link to={`/kigo/${kigo.id}`} ><Card style={{ width: 240 }}  bodyStyle={{ padding: 0 }}>
-                <div className="kigo-card vertical-text">
-                  <h3>{kigo.name}</h3>
-                  <p>{kigo.definition}</p>
-                </div>
-              </Card></Link>
+                <Link to={`/kigo/${kigo.id}`} >
+                  <Card style={{ width: 240 }}>
+                    <div className="vertical-text">
+                      <h3>{kigo.name}</h3>
+                      <p>{kigo.definition}</p>
+                    </div>
+                  </Card>
+                </Link>
               </Col>
             )
           })
