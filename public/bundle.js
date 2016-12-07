@@ -58,7 +58,7 @@
 	
 	var _AppContainer2 = _interopRequireDefault(_AppContainer);
 	
-	var _Waka = __webpack_require__(367);
+	var _Waka = __webpack_require__(368);
 	
 	var _Waka2 = _interopRequireDefault(_Waka);
 	
@@ -66,15 +66,15 @@
 	
 	var _Kigo2 = _interopRequireDefault(_Kigo);
 	
-	var _SingleKigo = __webpack_require__(369);
+	var _SingleKigo = __webpack_require__(370);
 	
 	var _SingleKigo2 = _interopRequireDefault(_SingleKigo);
 	
-	var _SingleWaka = __webpack_require__(370);
+	var _SingleWaka = __webpack_require__(371);
 	
 	var _SingleWaka2 = _interopRequireDefault(_SingleWaka);
 	
-	var _NotFound = __webpack_require__(368);
+	var _NotFound = __webpack_require__(369);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -21534,11 +21534,11 @@
 	
 	var _Kigo2 = _interopRequireDefault(_Kigo);
 	
-	var _Waka = __webpack_require__(367);
+	var _Waka = __webpack_require__(368);
 	
 	var _Waka2 = _interopRequireDefault(_Waka);
 	
-	var _NotFound = __webpack_require__(368);
+	var _NotFound = __webpack_require__(369);
 	
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 	
@@ -21635,12 +21635,7 @@
 	          { id: 'main', className: 'container-fluid' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-xs-2' },
-	            _react2.default.createElement(Sidebar, null)
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-xs-10' },
+	            { className: 'col-xs-12' },
 	            _react2.default.createElement(_NotFound2.default, null)
 	          )
 	        );
@@ -21649,7 +21644,7 @@
 	        { id: 'main', className: 'container-fluid' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-10' },
+	          { className: 'col-xs-12' },
 	          this.props.children && _react2.default.cloneElement(this.props.children, props)
 	        )
 	      );
@@ -28108,9 +28103,12 @@
 	
 	__webpack_require__(365);
 	
+	var _shuffleArray = __webpack_require__(367);
+	
+	var _shuffleArray2 = _interopRequireDefault(_shuffleArray);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import { Card } from 'antd';
 	var Kigo = function Kigo(props) {
 	
 	  var kigo = props.kigo;
@@ -28129,7 +28127,7 @@
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'list-group' },
-	        kigo.map(function (kigo) {
+	        (0, _shuffleArray2.default)(kigo).map(function (kigo) {
 	          return _react2.default.createElement(
 	            _col2.default,
 	            { span: '8', key: kigo.id },
@@ -28161,7 +28159,7 @@
 	    )
 	  );
 	};
-	
+	// import { Card } from 'antd';
 	exports.default = Kigo;
 
 /***/ },
@@ -30470,6 +30468,94 @@
 
 /***/ },
 /* 367 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	/**
+	 * Randomize the order of the elements in a given array.
+	 * @param {Array} arr - The given array.
+	 * @param {Object} [options] - Optional configuration options.
+	 * @param {Boolean} [options.copy] - Sets if should return a shuffled copy of the given array. By default it's a falsy value.
+	 * @param {Function} [options.rng] - Specifies a custom random number generator.
+	 * @returns {Array}
+	 */
+	function shuffle(arr, options) {
+	
+	  if (!Array.isArray(arr)) {
+	    throw new Error('shuffle expect an array as parameter.');
+	  }
+	
+	  options = options || {};
+	
+	  var collection = arr,
+	      len = arr.length,
+	      rng = options.rng || Math.random,
+	      random,
+	      temp;
+	
+	  if (options.copy === true) {
+	    collection = arr.slice();
+	  }
+	
+	  while (len) {
+	    random = Math.floor(rng() * len);
+	    len -= 1;
+	    temp = collection[len];
+	    collection[len] = collection[random];
+	    collection[random] = temp;
+	  }
+	
+	  return collection;
+	};
+	
+	/**
+	 * Pick one or more random elements from the given array.
+	 * @param {Array} arr - The given array.
+	 * @param {Object} [options] - Optional configuration options.
+	 * @param {Number} [options.picks] - Specifies how many random elements you want to pick. By default it picks 1.
+	 * @param {Function} [options.rng] - Specifies a custom random number generator.
+	 * @returns {Object}
+	 */
+	shuffle.pick = function(arr, options) {
+	
+	  if (!Array.isArray(arr)) {
+	    throw new Error('shuffle.pick() expect an array as parameter.');
+	  }
+	
+	  options = options || {};
+	
+	  var rng = options.rng || Math.random,
+	      picks = options.picks || 1;
+	
+	  if (typeof picks === 'number' && picks !== 1) {
+	    var len = arr.length,
+	        collection = arr.slice(),
+	        random = [],
+	        index;
+	
+	    while (picks && len) {
+	      index = Math.floor(rng() * len);
+	      random.push(collection[index]);
+	      collection.splice(index, 1);
+	      len -= 1;
+	      picks -= 1;
+	    }
+	
+	    return random;
+	  }
+	
+	  return arr[Math.floor(rng() * arr.length)];
+	};
+	
+	/**
+	 * Expose
+	 */
+	module.exports = shuffle;
+
+
+/***/ },
+/* 368 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30552,7 +30638,7 @@
 	exports.default = Waka;
 
 /***/ },
-/* 368 */
+/* 369 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30624,7 +30710,7 @@
 	exports.default = NotFound;
 
 /***/ },
-/* 369 */
+/* 370 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30651,7 +30737,7 @@
 	exports.default = SingleKigo;
 
 /***/ },
-/* 370 */
+/* 371 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

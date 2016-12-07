@@ -65,10 +65,7 @@ export default class AppContainer extends Component {
     if (this.state.invalid) {
       return (
         <div id="main" className="container-fluid">
-          <div className="col-xs-2">
-            <Sidebar />
-          </div>
-          <div className="col-xs-10">
+          <div className="col-xs-12">
           <NotFound />
           </div>
         </div>
@@ -76,7 +73,7 @@ export default class AppContainer extends Component {
     } else 
     return (
       <div id="main" className="container-fluid">
-        <div className="col-xs-10">
+        <div className="col-xs-12">
         {
           this.props.children && React.cloneElement(this.props.children, props)
         }
