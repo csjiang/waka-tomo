@@ -7,7 +7,6 @@ import Card from 'antd/lib/card';
 import 'antd/dist/antd.css'; 
 import shuffle from 'shuffle-array';
 
-
 const Kigo = (props) => {
 
   const kigo = props.kigo;

@@ -12,10 +12,10 @@ ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={AppContainer}>
       <IndexRedirect to='Kigo' />
-      <Route path='Kigo' component={Kigo} />
-      <Route path='Kigo/:kigoid' component={SingleKigo} /> 
-      <Route path='Waka' component={Waka} />
-      <Route path='Waka/:wakaid' component={SingleWaka} />
+      <Route path='kigo' component={Kigo} />
+      <Route path='kigo/:kigoId' component={SingleKigo} /> 
+      <Route path='waka' component={Waka} />
+      <Route path='waka/:wakaId' component={SingleWaka} />
       <Route path='*' status={404} component={NotFound} />
     </Route>
   </Router>,

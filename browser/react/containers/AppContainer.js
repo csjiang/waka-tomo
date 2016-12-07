@@ -12,6 +12,9 @@ export default class AppContainer extends Component {
   constructor (props) {
     super(props);
     this.state = initialState;
+
+    this.selectKigo = this.selectKigo.bind(this);
+    this.selectWaka = this.selectWaka.bind(this);
   }
 
   componentDidMount () {
@@ -35,8 +38,8 @@ export default class AppContainer extends Component {
   selectKigo (kigoId) {
     axios.get(`/api/kigo/${kigoId}`)
       .then(res => res.data)
-      .then(kigo => this.setState({
-        selectedKigo: kigo
+      .then(theKigo => this.setState({
+        selectedKigo: theKigo
       }))
     .catch(error => this.setState({ invalid: true }));  
   }
@@ -44,22 +47,16 @@ export default class AppContainer extends Component {
   selectWaka (wakaId){
       axios.get(`/api/waka/${wakaId}`)
       .then(res => res.data)
-      .then(waka => this.setState({
-        selectedWaka: waka
+      .then(theWaka => this.setState({
+        selectedWaka: theWaka
       }))
     .catch(error => this.setState({ invalid: true }));  
   }
 
   render () {
     const props = Object.assign({}, this.state, {
-      kigo: this.state.kigo,
-      waka: this.state.waka,
-      selectedKigo: this.state.selectedKigo,
-      selectedWaka: this.state.selectedWaka,
-      selectedSeason: this.state.selectedSeason,
-      selectedCategory: this.state.selectedCategory,
-      savedKigo: this.state.savedKigo,
-      savedWaka: this.state.savedWaka,
+      selectKigo: this.selectKigo,
+      selectWaka: this.selectWaka
     });
 
     if (this.state.invalid) {

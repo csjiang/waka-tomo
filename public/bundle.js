@@ -89,10 +89,10 @@
 	    _reactRouter.Route,
 	    { path: '/', component: _AppContainer2.default },
 	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'Kigo' }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'Kigo', component: _Kigo2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'Kigo/:kigoid', component: _SingleKigo2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'Waka', component: _Waka2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'Waka/:wakaid', component: _SingleWaka2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'kigo', component: _Kigo2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'kigo/:kigoId', component: _SingleKigo2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'waka', component: _Waka2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'waka/:wakaId', component: _SingleWaka2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '*', status: 404, component: _NotFound2.default })
 	  )
 	), document.getElementById('app'));
@@ -21561,6 +21561,9 @@
 	    var _this = _possibleConstructorReturn(this, (AppContainer.__proto__ || Object.getPrototypeOf(AppContainer)).call(this, props));
 	
 	    _this.state = _initialState2.default;
+	
+	    _this.selectKigo = _this.selectKigo.bind(_this);
+	    _this.selectWaka = _this.selectWaka.bind(_this);
 	    return _this;
 	  }
 	
@@ -21592,9 +21595,9 @@
 	
 	      _axios2.default.get('/api/kigo/' + kigoId).then(function (res) {
 	        return res.data;
-	      }).then(function (kigo) {
+	      }).then(function (theKigo) {
 	        return _this3.setState({
-	          selectedKigo: kigo
+	          selectedKigo: theKigo
 	        });
 	      }).catch(function (error) {
 	        return _this3.setState({ invalid: true });
@@ -21607,9 +21610,9 @@
 	
 	      _axios2.default.get('/api/waka/' + wakaId).then(function (res) {
 	        return res.data;
-	      }).then(function (waka) {
+	      }).then(function (theWaka) {
 	        return _this4.setState({
-	          selectedWaka: waka
+	          selectedWaka: theWaka
 	        });
 	      }).catch(function (error) {
 	        return _this4.setState({ invalid: true });
@@ -21619,14 +21622,8 @@
 	    key: 'render',
 	    value: function render() {
 	      var props = Object.assign({}, this.state, {
-	        kigo: this.state.kigo,
-	        waka: this.state.waka,
-	        selectedKigo: this.state.selectedKigo,
-	        selectedWaka: this.state.selectedWaka,
-	        selectedSeason: this.state.selectedSeason,
-	        selectedCategory: this.state.selectedCategory,
-	        savedKigo: this.state.savedKigo,
-	        savedWaka: this.state.savedWaka
+	        selectKigo: this.selectKigo,
+	        selectWaka: this.selectWaka
 	      });
 	
 	      if (this.state.invalid) {
@@ -30716,8 +30713,10 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
 	var _react = __webpack_require__(1);
 	
@@ -30725,14 +30724,97 @@
 	
 	var _reactRouter = __webpack_require__(204);
 	
+	__webpack_require__(365);
+	
+	var _card = __webpack_require__(364);
+	
+	var _card2 = _interopRequireDefault(_card);
+	
+	var _Waka = __webpack_require__(368);
+	
+	var _Waka2 = _interopRequireDefault(_Waka);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var SingleKigo = function SingleKigo(props) {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	  var kigo = props.selectedKigo;
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	  return _react2.default.createElement('div', null);
-	};
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SingleKigo = function (_React$Component) {
+		_inherits(SingleKigo, _React$Component);
+	
+		function SingleKigo() {
+			_classCallCheck(this, SingleKigo);
+	
+			return _possibleConstructorReturn(this, (SingleKigo.__proto__ || Object.getPrototypeOf(SingleKigo)).apply(this, arguments));
+		}
+	
+		_createClass(SingleKigo, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var selectKigo = this.props.selectKigo;
+				var kigoId = this.props.routeParams.kigoId;
+	
+				selectKigo(kigoId);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var kigo = this.props.selectedKigo;
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						_card2.default,
+						{ title: kigo.name, extra: _react2.default.createElement(
+								'a',
+								{ href: '#' },
+								'\u4F8B\u53E5\u3092\u8868\u793A\u3059\u308B'
+							), style: { width: 300 } },
+						_react2.default.createElement(
+							'p',
+							null,
+							'\u8AAD\u307F\u65B9\uFF1A',
+							kigo.reading
+						),
+						_react2.default.createElement(
+							'p',
+							null,
+							'\u5B63\u7BC0\uFF1A',
+							kigo.season
+						),
+						_react2.default.createElement(
+							'p',
+							null,
+							'\u610F\u5473\uFF1A',
+							kigo.definition
+						),
+						_react2.default.createElement(
+							'p',
+							null,
+							'\u5206\u985E\uFF1A'
+						),
+						_react2.default.createElement(
+							'ul',
+							null,
+							'\u540C\u7FA9\u8A9E\u30FB\u540C\u985E\u8A9E\uFF1A',
+							kigo.synonyms && kigo.synonyms.map(function (synonym) {
+								return _react2.default.createElement(
+									'li',
+									{ className: 'list-unstyled', key: kigo.synonyms.indexOf(synonym) },
+									synonym
+								);
+							})
+						)
+					)
+				);
+			}
+		}]);
+	
+		return SingleKigo;
+	}(_react2.default.Component);
 	
 	exports.default = SingleKigo;
 

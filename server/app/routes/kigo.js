@@ -13,21 +13,21 @@ router.get('/', function(req, res, next) {
 	.catch(next);
 });
 
-// router.param('kigoId', function (req, res, next, id) { //todo: scopes
-//   Kigo.scope('defaultScope', 'populated').findById(id)
-//   .then(function (kigo) {
-//     if (!kigo) {
-//       const err = Error('Entry not found');
-//       err.status = 404;
-//       throw err
-//     }
-//     req.kigo = kigo;
-//     next();
-//     return null; // silences bluebird warning about promises inside of next
-//   })
-//   .catch(next);
-// });
+router.param('kigoId', function (req, res, next, id) {
+  Kigo.findById(id)
+  .then(function (kigo) {
+    if (!kigo) {
+      const err = Error('Entry not found');
+      err.status = 404;
+      throw err
+    }
+    req.kigo = kigo;
+    next();
+    return null; // silences bluebird warning about promises inside of next
+  })
+  .catch(next);
+});
 
-// router.get('/:kigoId', function (req, res) {
-//   res.json(req.kigo);
-// });
+router.get('/:kigoId', function (req, res) {
+  res.json(req.kigo);
+});
