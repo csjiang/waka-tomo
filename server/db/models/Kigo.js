@@ -41,6 +41,15 @@ module.exports = db.define('kigo', {
 			.then(function (foundKigo) {
 				return foundKigo;
 			})
+		},
+
+		findByCategory: function(category) {
+			return this.findAll({
+				where: { category }
+			})
+			.then(function (foundKigo) {
+				return foundKigo;
+			})
 		}
 	},
 	hooks: {},

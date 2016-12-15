@@ -1,13 +1,13 @@
 const url = `https://kotobank.jp/word/%E5%AD%A3%E8%AA%9E-473181#E5.A4.A7.E8.BE.9E.E6.9E.97.20.E7.AC.AC.E4.B8.89.E7.89.88`;
 //Christine is very sad at the lack of APIs among Japanese dictionaries
 
-const db = require('../server/db/');
 const cheerio = require('cheerio');
 const request = require('request-promise');
 const parse = require('./kigo_parser');
-let cleanEntries;
 
-module.exports = request.get(url)
+module.exports = scrape_kigo = () => {
+	let cleanEntries;
+	return request.get(url)
   	.then((res) => {
 	    const $ = cheerio.load(res, { decodeEntities: false });
 
@@ -20,11 +20,8 @@ module.exports = request.get(url)
 		    .replace(/［/g, '<br>[')
 		    .replace(/］/g, ']')
 		    .replace(/<\/?span.*?>/g, '') 		// remove ruby tags
-		    .replace(/<\/b>　<br>/g, '</b>　（新年）<br>') //assign season for new year entries (to facilitate parsing) 
+		    .replace(/<\/b>.?<br>/g, '</b>　（新年）<br>') //assign season for new year entries (to facilitate parsing) 
 		    .split('<b>'); 						// split on each entry
 	})
-	.then(() => db.sync({force : true}))
-    .then(() => console.log('Finished syncing the database!'))
-    .then(() => cleanEntries.forEach(e => parse(e)))
-    .then(() => console.log('Finished populating the database!'))
-  	.catch(console.error);
+    .then(() => cleanEntries.forEach(e => parse(e)));
+};
