@@ -12,7 +12,7 @@ module.exports = db.define('kigo', {
 	},
 	season: {
 		type: Sequelize.STRING,
-		defaultValue: '新年',
+		allowNull: false,
 	},
 	reading: {
 		type: Sequelize.STRING,
@@ -22,10 +22,10 @@ module.exports = db.define('kigo', {
 		type: Sequelize.ARRAY(Sequelize.STRING),
 		defaultValue: [],
 	},
-	// category: { //not yet implemented
-	// 	type: Sequelize.STRING,
-	// 	defaultValue: '',
-	// }
+	category: {
+		type: Sequelize.STRING,
+		defaultValue: undefined,
+	}
 }, {
 	getterMethods: {},
 	instanceMethods: {},

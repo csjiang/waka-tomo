@@ -1,9 +1,0 @@
-- need to replace malformed < and > in poet name, do global replace with < and > 
-- split on <br>　　　: 7 categories for each of 5 seasons- concatenate words together and attach category column to each word - strip these 
-- split on seasons? possibly no need to if the season name is in each of the season descriptions - strip these
-- word: /<br><b>.+?</g - 412 words
-- hiragana: /<span class="ruby">.+</span></b>/g (this is missing a few words, so this property should allow Null- default will set it equal to title?)
-- season: /　（.+?）/g (works for all except new year ones) 
-- synonyms: /［.+?］/g (some don't have, so this can be null or empty array)
-- description: /<br>.*<br>/ - 411 matches- after removing poems and replacing w <br>
-- poem: /　　.+?<.+?>.*?<br>/g - 536 matches (plus have to add last one manually) 
