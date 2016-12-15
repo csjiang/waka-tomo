@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
-import 'antd/dist/antd.css'; 
-import Card from 'antd/lib/card';  
+// import 'antd/dist/antd.css'; 
+import { Card } from 'antd';
 import Waka from './Waka';
 
 class SingleKigo extends React.Component {

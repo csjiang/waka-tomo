@@ -34,7 +34,7 @@ const parse = chunk => {
             newEntry['definition'] = text.trim();
         } else if (text.includes('＜')) { // 'うららかや猫にものいふ妻のこゑ　＜日野草城＞'
             const splitLine = text.split('＜');
-            newPoem['text'] += splitLine[0].trim();
+            newPoem['text'] = splitLine[0].trim();
             newPoem['author'] = splitLine[1].replace('＞', '');
             
             // poem instance created here because some entries have more than one example
@@ -59,7 +59,7 @@ const parse = chunk => {
         .catch(console.error);
     },
 
-}, {decodeEntities: true});
+}, { decodeEntities: true });
     parser.write(chunk);
     parser.end();
 }

@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../_db');
+const tokenize = require('./segmenter');
 
 module.exports = db.define('waka', {
   text: {
@@ -12,7 +13,7 @@ module.exports = db.define('waka', {
   // },
   tokens: {
   	type: Sequelize.ARRAY(Sequelize.STRING),
-  	defaultValue: [],
+  	defaultValue: []
   },
   author: {
   	type: Sequelize.STRING,
@@ -47,5 +48,11 @@ module.exports = db.define('waka', {
       });
     }
   },
-  // hooks: {},
+  hooks: {
+    beforeCreate: function(waka, options) {
+      var noParen = waka.text.replace(/\ *\([^)]*\) */g, '');
+      waka.tokens = tokenize.segment(noParen) 
+    }
+  }
 });
+

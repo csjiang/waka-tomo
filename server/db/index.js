@@ -1,9 +1,16 @@
 const db = require('./_db');
 
 require('./models');
+const Waka = require('./models/Waka');
+const Kigo = require('./models/Kigo');
 
-// Waka.hasMany(Kigo);
-// Kigo.hasMany(Waka); // cyclic dependency? Ask at office hours
+
+Waka.belongsToMany(Kigo, { through: 'name' });
+Kigo.belongsToMany(Waka, { through: 'tokens' }); // cyclic dependency? Ask at office hours
+
+//for testing
+// module.exports = db; 
+
 
 var syncedDbPromise = db.sync();
 
