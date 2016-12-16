@@ -20,9 +20,9 @@ class SingleKigo extends React.Component {
 	    <div>
 		  <Card title={kigo.name} extra={<Link to={`/kigo/${kigo.id}/waka_matches`}>例句を表示する</Link>} style={{ width: 300 }}>
 		    <p>読み方：{kigo.reading}</p>
-		    <p>季節：{kigo.season}</p>
+		    <p>季節：<Link to={`/kigo/season/${kigo.season}`} onClick={() => this.props.selectSeason(kigo.season)}>{kigo.season}</Link></p>
 		    <p>意味：{kigo.definition}</p>
-		    <p>分類：</p>
+		    <p>分類：<Link to={`/kigo/category/${kigo.category}`} onClick={() => this.props.selectCategory(kigo.category)}>{kigo.category}</Link></p>
 		    <ul>同義語・同類語：
 			    {
 			    	kigo.synonyms && kigo.synonyms.map(synonym => <li className="list-unstyled" key={kigo.synonyms.indexOf(synonym)}>{synonym}</li>)

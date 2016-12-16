@@ -39,3 +39,15 @@ router.get('/:kigoId/waka_matches', (req, res, next) => {
   .then(wakas => res.json(wakas))
   .catch(next);
 });
+
+router.get('/season/:seasonName', (req, res, next) => {
+  Kigo.findBySeason(req.params.seasonName)
+  .then(kigo => res.json(kigo))
+  .catch(next);
+});
+
+router.get('/category/:categoryName', (req, res, next) => {
+  Kigo.findByCategory(req.params.categoryName)
+  .then(kigo => res.json(kigo))
+  .catch(next);
+});

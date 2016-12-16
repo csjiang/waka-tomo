@@ -15,6 +15,8 @@ ReactDOM.render(
       <Route path='kigo' component={Kigo} />
       <Route path='kigo/:kigoId' component={SingleKigo} /> 
       <Route path='kigo/:kigoId/waka_matches' component={Waka} /> 
+      <Route path='kigo/season/:seasonName' component={Kigo} /> 
+      <Route path='kigo/category/:categoryName' component={Kigo} /> 
       <Route path='waka' component={Waka} />
       <Route path='waka/:wakaId' component={SingleWaka} />
       <Route path='waka/author/:authorName' component={Waka} />
