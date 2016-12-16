@@ -15,6 +15,7 @@ export default class AppContainer extends Component {
 
     this.selectKigo = this.selectKigo.bind(this);
     this.selectWaka = this.selectWaka.bind(this);
+    this.selectAuthor = this.selectAuthor.bind(this);
   }
 
   componentDidMount () {
@@ -36,27 +37,44 @@ export default class AppContainer extends Component {
   }
 
   selectKigo (kigoId) {
+    let theKigo;
     axios.get(`/api/kigo/${kigoId}`)
       .then(res => res.data)
-      .then(theKigo => this.setState({
-        selectedKigo: theKigo
+      .then(foundKigo => {
+        theKigo = foundKigo;
+      })
+      .then(() => axios.get(`/api/kigo/${kigoId}/waka_matches`))
+      .then(res => res.data)
+      .then(waka => this.setState({
+        selectedKigo: theKigo,
+        waka
       }))
     .catch(error => this.setState({ invalid: true }));  
   }
 
   selectWaka (wakaId){
-      axios.get(`/api/waka/${wakaId}`)
-      .then(res => res.data)
-      .then(theWaka => this.setState({
-        selectedWaka: theWaka
-      }))
+    axios.get(`/api/waka/${wakaId}`)
+    .then(res => res.data)
+    .then(theWaka => this.setState({
+      selectedWaka: theWaka
+    }))
     .catch(error => this.setState({ invalid: true }));  
+  }
+
+  selectAuthor (authorName) {
+    axios.get(`api/waka/author/${authorName}`)
+    .then(res => res.data) 
+    .then(wakaByAuthor => this.setState({
+      waka: wakaByAuthor
+    }))
+    .catch(error => this.setState({ invalid: true }));
   }
 
   render () {
     const props = Object.assign({}, this.state, {
       selectKigo: this.selectKigo,
-      selectWaka: this.selectWaka
+      selectWaka: this.selectWaka,
+      selectAuthor: this.selectAuthor
     });
 
     if (this.state.invalid) {

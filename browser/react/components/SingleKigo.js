@@ -7,6 +7,7 @@ import Waka from './Waka';
 class SingleKigo extends React.Component {
 
   componentDidMount () {
+  	console.log(this.props);
     const selectKigo = this.props.selectKigo;
     const kigoId = this.props.routeParams.kigoId;
 
@@ -17,7 +18,7 @@ class SingleKigo extends React.Component {
 	  const kigo = this.props.selectedKigo;
 	  return (
 	    <div>
-		  <Card title={kigo.name} extra={<a href="#">例句を表示する</a>} style={{ width: 300 }}>
+		  <Card title={kigo.name} extra={<Link to={`/kigo/${kigo.id}/waka_matches`}>例句を表示する</Link>} style={{ width: 300 }}>
 		    <p>読み方：{kigo.reading}</p>
 		    <p>季節：{kigo.season}</p>
 		    <p>意味：{kigo.definition}</p>

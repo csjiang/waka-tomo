@@ -88,11 +88,13 @@
 	  _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: _AppContainer2.default },
-	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'Kigo' }),
+	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'kigo' }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'kigo', component: _Kigo2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'kigo/:kigoId', component: _SingleKigo2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'kigo/:kigoId/waka_matches', component: _Waka2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'waka', component: _Waka2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'waka/:wakaId', component: _SingleWaka2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'waka/author/:authorName', component: _Waka2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '*', status: 404, component: _NotFound2.default })
 	  )
 	), document.getElementById('app'));
@@ -21564,6 +21566,7 @@
 	
 	    _this.selectKigo = _this.selectKigo.bind(_this);
 	    _this.selectWaka = _this.selectWaka.bind(_this);
+	    _this.selectAuthor = _this.selectAuthor.bind(_this);
 	    return _this;
 	  }
 	
@@ -21593,11 +21596,19 @@
 	    value: function selectKigo(kigoId) {
 	      var _this3 = this;
 	
+	      var theKigo = void 0;
 	      _axios2.default.get('/api/kigo/' + kigoId).then(function (res) {
 	        return res.data;
-	      }).then(function (theKigo) {
+	      }).then(function (foundKigo) {
+	        theKigo = foundKigo;
+	      }).then(function () {
+	        return _axios2.default.get('/api/kigo/' + kigoId + '/waka_matches');
+	      }).then(function (res) {
+	        return res.data;
+	      }).then(function (waka) {
 	        return _this3.setState({
-	          selectedKigo: theKigo
+	          selectedKigo: theKigo,
+	          waka: waka
 	        });
 	      }).catch(function (error) {
 	        return _this3.setState({ invalid: true });
@@ -21619,11 +21630,27 @@
 	      });
 	    }
 	  }, {
+	    key: 'selectAuthor',
+	    value: function selectAuthor(authorName) {
+	      var _this5 = this;
+	
+	      _axios2.default.get('api/waka/author/' + authorName).then(function (res) {
+	        return res.data;
+	      }).then(function (wakaByAuthor) {
+	        return _this5.setState({
+	          waka: wakaByAuthor
+	        });
+	      }).catch(function (error) {
+	        return _this5.setState({ invalid: true });
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var props = Object.assign({}, this.state, {
 	        selectKigo: this.selectKigo,
-	        selectWaka: this.selectWaka
+	        selectWaka: this.selectWaka,
+	        selectAuthor: this.selectAuthor
 	      });
 	
 	      if (this.state.invalid) {
@@ -30990,9 +31017,17 @@
 	  _createClass(Waka, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'waka' },
+	        this.props.routeParams ? _react2.default.createElement(
+	          'h3',
+	          null,
+	          this.props.routeParams.authorName,
+	          '\u306E'
+	        ) : null,
 	        _react2.default.createElement(
 	          'h3',
 	          null,
@@ -31014,7 +31049,9 @@
 	            _react2.default.createElement('br', null),
 	            _react2.default.createElement(
 	              _reactRouter.Link,
-	              { to: '#' },
+	              { to: '/waka/author/' + waka.author, onClick: function onClick() {
+	                  return _this2.props.selectAuthor(waka.author);
+	                } },
 	              waka.author
 	            )
 	          );
@@ -31150,6 +31187,7 @@
 		_createClass(SingleKigo, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
+				console.log(this.props);
 				var selectKigo = this.props.selectKigo;
 				var kigoId = this.props.routeParams.kigoId;
 	
@@ -31165,8 +31203,8 @@
 					_react2.default.createElement(
 						_card2.default,
 						{ title: kigo.name, extra: _react2.default.createElement(
-								'a',
-								{ href: '#' },
+								_reactRouter.Link,
+								{ to: '/kigo/' + kigo.id + '/waka_matches' },
 								'\u4F8B\u53E5\u3092\u8868\u793A\u3059\u308B'
 							), style: { width: 300 } },
 						_react2.default.createElement(

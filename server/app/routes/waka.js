@@ -7,9 +7,18 @@ const models = require('../../db/models');
 const Waka = models.Waka;
 module.exports = router;
 
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
 	Waka.findAll({})
 	.then(waka => res.json(waka))
+	.catch(next);
+});
+
+router.get('/author/:authorName', (req, res, next) => {
+	Waka.findByAuthor(req.params.authorName)
+	.then(waka => {
+		console.log(waka);
+		res.json(waka)
+	})
 	.catch(next);
 });
 

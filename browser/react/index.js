@@ -11,11 +11,13 @@ import {Router, Route, hashHistory, IndexRedirect} from 'react-router';
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={AppContainer}>
-      <IndexRedirect to='Kigo' />
+    <IndexRedirect to='kigo' />
       <Route path='kigo' component={Kigo} />
       <Route path='kigo/:kigoId' component={SingleKigo} /> 
+      <Route path='kigo/:kigoId/waka_matches' component={Waka} /> 
       <Route path='waka' component={Waka} />
       <Route path='waka/:wakaId' component={SingleWaka} />
+      <Route path='waka/author/:authorName' component={Waka} />
       <Route path='*' status={404} component={NotFound} />
     </Route>
   </Router>,

@@ -5,6 +5,8 @@ const mime = require('mime');
 const router = express.Router();
 const models = require('../../db/models');
 const Kigo = models.Kigo;
+const Waka = models.Waka;
+
 module.exports = router;
 
 router.get('/', function(req, res, next) {
@@ -13,7 +15,7 @@ router.get('/', function(req, res, next) {
 	.catch(next);
 });
 
-router.param('kigoId', function (req, res, next, id) {
+router.param('kigoId', (req, res, next, id) => {
   Kigo.findById(id)
   .then(function (kigo) {
     if (!kigo) {
@@ -28,6 +30,12 @@ router.param('kigoId', function (req, res, next, id) {
   .catch(next);
 });
 
-router.get('/:kigoId', function (req, res) {
+router.get('/:kigoId', (req, res) => {
   res.json(req.kigo);
+});
+
+router.get('/:kigoId/waka_matches', (req, res, next) => {
+  Waka.findByToken(req.kigo.name)
+  .then(wakas => res.json(wakas))
+  .catch(next);
 });

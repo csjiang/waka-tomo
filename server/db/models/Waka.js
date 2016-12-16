@@ -11,6 +11,9 @@ module.exports = db.define('waka', {
   // 	type: Sequelize.STRING,
   // 	defaultValue: '',
   // },
+  noParen: {
+    type: Sequelize.STRING,
+  },
   tokens: {
   	type: Sequelize.ARRAY(Sequelize.STRING),
   	defaultValue: []
@@ -25,11 +28,7 @@ module.exports = db.define('waka', {
   classMethods:{
     findByAuthor: function (author) {
       return this.findAll({
-        where: {
-          author: {
-            $like: `%${author}%`
-          }
-        }
+        where: { author }
       })
       .then(function (foundWaka) {
         return foundWaka;
@@ -38,9 +37,19 @@ module.exports = db.define('waka', {
     findByToken: function (token) {
       return this.findAll({
         where: {
-          tokens: {
-            $contains: token
-          }
+          $or: [
+          {
+            tokens: {
+              overlap: [token]
+            }
+          }, 
+          {
+            noParen: { //to facilitate matching until I find a better tokenizer...sigh 
+              $like: {
+                $any: [`%${token}`, `%${token}%`, `${token}%`]
+              }
+            }
+          }]
         },
       })
       .then(function (foundWaka) {
@@ -51,8 +60,8 @@ module.exports = db.define('waka', {
   hooks: {
     beforeCreate: function(waka, options) {
       var noParen = waka.text.replace(/\ *\([^)]*\) */g, '');
-      waka.tokens = tokenize.segment(noParen) 
+      waka.noParen = noParen;
+      waka.tokens = tokenize.segment(noParen);
     }
   }
 });
-

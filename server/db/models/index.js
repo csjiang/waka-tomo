@@ -9,3 +9,7 @@ module.exports = {
   Kigo,
   Waka,
 };
+
+// Waka.findByToken('七夕')
+// .then(found => console.log(found))
+// .catch(console.error);
