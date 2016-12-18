@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-// import { Card } from 'antd';
 import { Col, Row, Card } from 'antd';
-// import 'antd/dist/antd.css'; 
 import shuffle from 'shuffle-array';
 
 const Kigo = (props) => {

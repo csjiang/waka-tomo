@@ -21591,6 +21591,11 @@
 	        return _this2.onLoad.apply(_this2, _toConsumableArray(data));
 	      });
 	    }
+	
+	    // shouldComponentUpdate (nextProps, nextState) {
+	    //   return nextState === this.state //to fix
+	    // }
+	
 	  }, {
 	    key: 'onLoad',
 	    value: function onLoad(kigo, waka) {
@@ -21710,7 +21715,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-xs-3' },
-	          _react2.default.createElement(_Navbar2.default, null)
+	          _react2.default.createElement(_Navbar2.default, { selectSeason: this.selectSeason, selectCategory: this.selectCategory })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -28202,13 +28207,15 @@
 	    key: 'handleClick',
 	    value: function handleClick(e) {
 	      console.log('click ', e);
-	      this.setState({
-	        current: e.key
-	      });
+	      // this.setState({
+	      //   current: e.key,
+	      // });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
 	      return _react2.default.createElement(
 	        _menu2.default,
 	        {
@@ -28255,22 +28262,46 @@
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '7' },
-	              '\u6625'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/season/春', onClick: function onClick() {
+	                    return _this2.props.selectSeason('春');
+	                  } },
+	                '\u6625'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '8' },
-	              '\u590F'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/season/夏', onClick: function onClick() {
+	                    return _this2.props.selectSeason('夏');
+	                  } },
+	                '\u590F'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '9' },
-	              '\u79CB'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/season/秋', onClick: function onClick() {
+	                    return _this2.props.selectSeason('秋');
+	                  } },
+	                '\u79CB'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '10' },
-	              '\u51AC'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/season/冬', onClick: function onClick() {
+	                    return _this2.props.selectSeason('冬');
+	                  } },
+	                '\u51AC'
+	              )
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28278,28 +28309,80 @@
 	            { key: 'sub5', title: '\u5B63\u984C\u5225' },
 	            _react2.default.createElement(
 	              _menu2.default.Item,
+	              { key: '19' },
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/生活', onClick: function onClick() {
+	                    return _this2.props.selectCategory('生活');
+	                  } },
+	                '\u751F\u6D3B'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _menu2.default.Item,
 	              { key: '11' },
-	              '\u4EBA\u4E8B\u30FB\u98A8\u7FD2'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/行事', onClick: function onClick() {
+	                    return _this2.props.selectCategory('行事');
+	                  } },
+	                '\u884C\u4E8B'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '12' },
-	              '\u52D5\u7269'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/動物', onClick: function onClick() {
+	                    return _this2.props.selectCategory('動物');
+	                  } },
+	                '\u52D5\u7269'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '13' },
-	              '\u690D\u7269'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/地理', onClick: function onClick() {
+	                    return _this2.props.selectCategory('地理');
+	                  } },
+	                '\u5730\u7406'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '14' },
-	              '\u81EA\u7136'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/天文', onClick: function onClick() {
+	                    return _this2.props.selectCategory('天文');
+	                  } },
+	                '\u5929\u6587'
+	              )
 	            ),
 	            _react2.default.createElement(
 	              _menu2.default.Item,
 	              { key: '15' },
-	              '\u98DF\u3079\u7269'
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/時候', onClick: function onClick() {
+	                    return _this2.props.selectCategory('時候');
+	                  } },
+	                '\u6642\u5019'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _menu2.default.Item,
+	              { key: '20' },
+	              _react2.default.createElement(
+	                _reactRouter.Link,
+	                { to: 'kigo/category/植物', onClick: function onClick() {
+	                    return _this2.props.selectCategory('植物');
+	                  } },
+	                '\u690D\u7269'
+	              )
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -35262,9 +35345,7 @@
 	    )
 	  );
 	};
-	// import 'antd/dist/antd.css'; 
 	
-	// import { Card } from 'antd';
 	exports.default = Kigo;
 
 /***/ },

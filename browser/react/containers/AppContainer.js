@@ -32,6 +32,10 @@ export default class AppContainer extends Component {
     .then(data => this.onLoad(...data));
   }
 
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   return nextState === this.state //to fix
+  // }
+
   onLoad (kigo, waka) {
     this.setState({
       kigo,
@@ -111,7 +115,7 @@ export default class AppContainer extends Component {
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-3">
-          <Navbar />
+          <Navbar selectSeason={this.selectSeason} selectCategory={this.selectCategory} />
         </div>
         <div className="col-xs-9">
         {
